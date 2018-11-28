@@ -1,4 +1,4 @@
-const FollowToggle = require('./follow_toggle.js');
+import FollowToggle from './follow_toggle.js';
 
 $( () => {
   const $buttons = $('.follow-toggle');

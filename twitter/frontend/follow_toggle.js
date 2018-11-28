@@ -1,3 +1,5 @@
+import APIUtil from './api_util.js';
+
 class FollowToggle {
   constructor(el) {
     this.el = $(el);
@@ -24,28 +26,23 @@ class FollowToggle {
     this.el.on('click', e => {
       e.preventDefault();
       if (this.followState === 'unfollowed') {
-        console.log('tree');
-        $.ajax({
-          url: `/users/${this.user_id}/follow`,
-          method: 'POST',
-          dataType: 'JSON'
-        });
-        this.followState = 'followed';
+        APIUtil.followUser(this.user_id)
+          .then(()=>{
+            this.followState = 'followed';
+            this.render();
+          });
       } else {
-        console.log('river');
-
-        $.ajax({
-          url: `/users/${this.user_id}/follow`,
-          method: 'DELETE',
-          dataType: 'JSON'
-        });
-        this.followState = 'unfollowed';
+        APIUtil.unfollowUser(this.user_id)
+          .then(()=>{
+            this.followState = 'unfollowed';
+            this.render();
+          });
       }
-    this.render();
+
     });
   }
 
 
 }
 
-module.exports = FollowToggle;
+export default FollowToggle;
