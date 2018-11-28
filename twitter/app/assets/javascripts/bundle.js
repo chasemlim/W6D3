@@ -94,11 +94,53 @@
 /***/ (function(module, exports) {
 
 class FollowToggle {
-  constructor($el) {
-    this.user_id = $el.user_id;
-    this.followState = $el.initial_follow_state;
-    // this.el = $($el);
+  constructor(el) {
+    this.el = $(el);
+    this.user_id = this.el.data('user-id');
+    this.followState = this.el.data('initial-follow-state');
+
+    console.log(this.el);
+    console.log(this.user_id);
+
+    this.render();
+    this.handleClick(this.el);
   }
+
+  render() {
+    if (this.followState === 'unfollowed') {
+      this.el.text("Follow");
+    } else {
+      this.el.text("Unfollow");
+    }
+  }
+
+  handleClick() {
+    console.log(this.followState);
+    this.el.on('click', e => {
+      e.preventDefault();
+      if (this.followState === 'unfollowed') {
+        console.log('tree');
+        $.ajax({
+          url: `/users/${this.user_id}/follow`,
+          method: 'POST',
+          dataType: 'JSON'
+        });
+        this.followState = 'followed';
+      } else {
+        console.log('river');
+
+        $.ajax({
+          url: `/users/${this.user_id}/follow`,
+          method: 'DELETE',
+          dataType: 'JSON'
+        });
+        this.followState = 'unfollowed';
+      }
+    this.render();
+    });
+  }
+
+
 }
 
 module.exports = FollowToggle;
@@ -114,6 +156,13 @@ module.exports = FollowToggle;
 /***/ (function(module, exports, __webpack_require__) {
 
 const FollowToggle = __webpack_require__(/*! ./follow_toggle.js */ "./frontend/follow_toggle.js");
+
+$( () => {
+  const $buttons = $('.follow-toggle');
+  $buttons.each(function(_, $button){
+    new FollowToggle($button);
+  });
+});
 
 
 /***/ })
