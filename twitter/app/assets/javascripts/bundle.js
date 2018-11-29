@@ -199,6 +199,13 @@ $( () => {
   });
 });
 
+$( () => {
+  const $searchWidgets = $('nav.users-search');
+  $searchWidgets.each(function(_, $searchWidget){
+    new UsersSearch($searchWidget);
+  });
+});
+
 
 /***/ })
 
